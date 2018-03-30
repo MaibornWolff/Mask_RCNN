@@ -2230,14 +2230,20 @@ class MaskRCNN():
         else:
             workers = max(self.config.BATCH_SIZE // 2, 2)
 
+        # TODO try using this instead of STEPS_PER_EPOCH / VALIDATION_STEPS
+        # steps_per_epoch = np.ceil(len(train_dataset.image_ids) / self.config.BATCH_SIZE)
+        # validation_steps = np.ceil(len(train_dataset.image_ids) / self.config.BATCH_SIZE)
+
         self.keras_model.fit_generator(
             train_generator,
             initial_epoch=self.epoch,
             epochs=epochs,
             steps_per_epoch=self.config.STEPS_PER_EPOCH,
+            # steps_per_epoch=steps_per_epoch,
             callbacks=callbacks,
             validation_data=next(val_generator),
             validation_steps=self.config.VALIDATION_STEPS,
+            # validation_steps=validation_steps,
             max_queue_size=100,
             workers=workers,
             use_multiprocessing=False,
